@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "41730867515",
+    "project_id": "arogyasathi-66444",
+    "storage_bucket": "arogyasathi-66444.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:41730867515:android:4b5744be9e685dcdb0771e",
+        "android_client_info": {
+          "package_name": "xcom.niteshray.apps.arogyasathi_ai"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "41730867515-p79nc5k3jfmkr1nig89mg2bfp45t2ude.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "xcom.niteshray.apps.arogyasathi_ai",
+            "certificate_hash": "f98b10dff62635bfb52db581d5cc6ae0ae779bf9"
+          }
+        },
+        {
+          "client_id": "41730867515-i8f3buqqmr7ecot1970afh8r1meehkor.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBKrSYUzphNKY8zpjistL9lUgxnyIH_8hg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "41730867515-i8f3buqqmr7ecot1970afh8r1meehkor.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
