@@ -17,6 +17,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import xcom.niteshray.apps.arogyasathi_ai.R
+import xcom.niteshray.apps.arogyasathi_ai.data.model.User
+import xcom.niteshray.apps.arogyasathi_ai.data.repository.UserRepo
 
 class GoogleSignInHelper {
     companion object {
@@ -57,23 +59,13 @@ class GoogleSignInHelper {
 
                         if (user != null && !user.isAnonymous) {
 
-                            val userMap = hashMapOf(
-                                "uid" to user.uid,
-                                "name" to (user.displayName ?: "Unknown"),
-                                "email" to (user.email ?: "Unknown"),
-                                "photoUrl" to (user.photoUrl?.toString() ?: ""),
-                                "signInTime" to System.currentTimeMillis()
+                            val user = User(
+                                uid= user.uid,
+                                name = (user.displayName ?: "Unknown"),
+                                email =  (user.email ?: "Unknown"),
+                                photoUrl = (user.photoUrl?.toString() ?: ""),
                             )
-
-                            Firebase.firestore.collection("Users")
-                                .document(user.uid)
-                                .set(userMap)
-                                .addOnSuccessListener {
-                                    login.invoke()
-                                }
-                                .addOnFailureListener {
-                                    it.printStackTrace()
-                                }
+                            UserRepo().saveUserData(user)
                         }
                     }
                 } catch (e: NoCredentialException) {
