@@ -57,6 +57,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.LottieConstants
+import com.airbnb.lottie.compose.animateLottieCompositionAsState
+import com.airbnb.lottie.compose.rememberLottieComposition
 import xcom.niteshray.apps.arogyasathi_ai.R
 import xcom.niteshray.apps.arogyasathi_ai.ui.theme.graycolor
 
@@ -67,6 +72,13 @@ fun MainScreen(mainViewModel: MainViewModel = viewModel()) {
     val isListening by mainViewModel.isListening.collectAsState()
     val user by mainViewModel.user.collectAsState()
     val messages by mainViewModel.messages.collectAsState()
+    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.mic_ani))
+    val progress by animateLottieCompositionAsState(
+        composition = composition,
+        iterations = LottieConstants.IterateForever,
+        isPlaying = true,
+        speed = 2f
+    )
 
     val permissionLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -99,7 +111,8 @@ fun MainScreen(mainViewModel: MainViewModel = viewModel()) {
             )
         },
         bottomBar = {
-            Column {
+            Column(
+            ){
                 Divider(color = Color.White, thickness = 1.dp)
                 ListeningIndicator(partialText = mainViewModel.partialText.collectAsState().value, isListening = isListening)
                 Box(
@@ -112,11 +125,22 @@ fun MainScreen(mainViewModel: MainViewModel = viewModel()) {
                     ,
                     contentAlignment = Alignment.Center
                 ) {
-                    Image(
-                        painter = if(!isListening) painterResource(R.drawable.mic) else painterResource(R.drawable.pause),
-                        contentDescription = "",
-                        modifier = Modifier.size(150.dp)
-                    )
+                    if(isListening){
+                        LottieAnimation(
+                            composition = composition,
+                            progress = { progress },
+                            modifier = Modifier.fillMaxSize()
+                        )
+                    }else{
+                        Image(
+                            painter = if(!isListening) painterResource(R.drawable.mic) else painterResource(R.drawable.pause),
+                            contentDescription = "",
+                            modifier = Modifier.size(150.dp)
+                        )
+
+                    }
+                    ListeningIndicator(partialText = mainViewModel.partialText.collectAsState().value, isListening = isListening)
+
                 }
             }
         },
@@ -174,7 +198,9 @@ fun ListeningIndicator(partialText: String, isListening: Boolean) {
     ) {
         Box(
             modifier = Modifier
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .padding(top = 230.dp)
+            ,
             contentAlignment = Alignment.Center
         ) {
             Text(

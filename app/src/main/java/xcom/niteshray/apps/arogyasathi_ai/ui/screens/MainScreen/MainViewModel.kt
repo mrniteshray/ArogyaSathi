@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.ai.client.generativeai.GenerativeModel
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -33,6 +34,7 @@ class MainViewModel : ViewModel() {
 
     private lateinit var speechRecognizerManager: SpeechRecognizerManager
 
+
     init {
         viewModelScope.launch {
             _messages.value = _messages.value + Message("Hello Nitesh ,How may i help you!",false)
@@ -46,6 +48,7 @@ class MainViewModel : ViewModel() {
                 onFinalResult = { finalSegment ->
                     viewModelScope.launch {
                         Log.d("Speechkadekh", "Final: $finalSegment")
+                        _messages.value = _messages.value + Message(finalSegment,true)
                         _fullText.value += if (_fullText.value.endsWith(" ") || _fullText.value.isEmpty()) {
                             finalSegment
                         } else {
@@ -69,10 +72,6 @@ class MainViewModel : ViewModel() {
         viewModelScope.launch {
             if (_isListening.value) {
                 _isListening.value = false
-                Log.d("Message", "Message added: ${_fullText.value}")
-                if (_fullText.value.isNotBlank()) {
-                    _messages.value = _messages.value + Message(_fullText.value.trim(), true)
-                }
                 speechRecognizerManager.stopListening()
             } else {
                 _isListening.value = true
