@@ -114,7 +114,6 @@ fun MainScreen(mainViewModel: MainViewModel = viewModel()) {
             Column(
             ){
                 Divider(color = Color.White, thickness = 1.dp)
-                ListeningIndicator(partialText = mainViewModel.partialText.collectAsState().value, isListening = isListening)
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -131,6 +130,7 @@ fun MainScreen(mainViewModel: MainViewModel = viewModel()) {
                             progress = { progress },
                             modifier = Modifier.fillMaxSize()
                         )
+                        ListeningIndicator(partialText = mainViewModel.partialText.collectAsState().value, isListening = isListening)
                     }else{
                         Image(
                             painter = if(!isListening) painterResource(R.drawable.mic) else painterResource(R.drawable.pause),
@@ -139,7 +139,6 @@ fun MainScreen(mainViewModel: MainViewModel = viewModel()) {
                         )
 
                     }
-                    ListeningIndicator(partialText = mainViewModel.partialText.collectAsState().value, isListening = isListening)
 
                 }
             }

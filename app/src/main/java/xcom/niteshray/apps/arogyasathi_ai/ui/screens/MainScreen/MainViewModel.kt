@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import xcom.niteshray.apps.arogyasathi_ai.data.Api.GeminiService
 import xcom.niteshray.apps.arogyasathi_ai.data.model.Message
 import xcom.niteshray.apps.arogyasathi_ai.data.model.User
 import xcom.niteshray.apps.arogyasathi_ai.data.repository.UserRepo
@@ -48,7 +49,14 @@ class MainViewModel : ViewModel() {
                 onFinalResult = { finalSegment ->
                     viewModelScope.launch {
                         Log.d("Speechkadekh", "Final: $finalSegment")
-                        _messages.value = _messages.value + Message(finalSegment,true)
+                        if(finalSegment.isNotEmpty()){
+                            _messages.value = _messages.value + Message(finalSegment,true)
+
+                            val response = GeminiService().getResponseFromGemini(_messages.value,finalSegment)
+                            _messages.value = _messages.value + Message(response,false)
+                        }
+
+
                         _fullText.value += if (_fullText.value.endsWith(" ") || _fullText.value.isEmpty()) {
                             finalSegment
                         } else {
