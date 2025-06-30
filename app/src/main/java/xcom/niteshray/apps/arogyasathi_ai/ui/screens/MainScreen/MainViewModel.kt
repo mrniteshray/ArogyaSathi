@@ -15,11 +15,15 @@ import xcom.niteshray.apps.arogyasathi_ai.data.model.Message
 import xcom.niteshray.apps.arogyasathi_ai.data.model.User
 import xcom.niteshray.apps.arogyasathi_ai.data.repository.UserRepo
 import xcom.niteshray.apps.arogyasathi_ai.utils.SpeechRecognizerManager
+import xcom.niteshray.apps.arogyasathi_ai.utils.TextToSpeechManager
 
 class MainViewModel : ViewModel() {
     private val userRepository = UserRepo()
     private val _fullText = MutableStateFlow("")
     val fullText: StateFlow<String> = _fullText.asStateFlow()
+
+
+    private lateinit var textToSpeechManager: TextToSpeechManager
 
     private val _user = MutableStateFlow<User?>(null)
     val user: StateFlow<User?> = _user.asStateFlow()
@@ -54,6 +58,7 @@ class MainViewModel : ViewModel() {
 
                             val response = GeminiService().getResponseFromGemini(_messages.value,finalSegment)
                             _messages.value = _messages.value + Message(response,false)
+                            textToSpeechManager.speak(response)
                         }
 
 
@@ -85,6 +90,7 @@ class MainViewModel : ViewModel() {
                 _isListening.value = true
                 _fullText.value = ""
                 _partialText.value = ""
+                textToSpeechManager = TextToSpeechManager(context)
                 startListening(context)
             }
         }
