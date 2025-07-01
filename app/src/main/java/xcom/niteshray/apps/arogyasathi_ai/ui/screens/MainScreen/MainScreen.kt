@@ -24,12 +24,16 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.MailOutline
 import androidx.compose.material.icons.filled.Phone
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -45,11 +49,14 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -64,21 +71,23 @@ import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
 import xcom.niteshray.apps.arogyasathi_ai.R
 import xcom.niteshray.apps.arogyasathi_ai.ui.theme.graycolor
+import xcom.niteshray.apps.arogyasathi_ai.utils.LanguagePreference
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(mainViewModel: MainViewModel = viewModel()) {
     var context = LocalContext.current
     val isListening by mainViewModel.isListening.collectAsState()
-    val user by mainViewModel.user.collectAsState()
     val messages by mainViewModel.messages.collectAsState()
     val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.mic_ani))
+    var isSettingDialog by remember { mutableStateOf(false) }
     val progress by animateLottieCompositionAsState(
         composition = composition,
         iterations = LottieConstants.IterateForever,
         isPlaying = true,
         speed = 2f
     )
+    val langpref = LanguagePreference(context)
 
     val permissionLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -89,6 +98,7 @@ fun MainScreen(mainViewModel: MainViewModel = viewModel()) {
     }
 
     LaunchedEffect(Unit) {
+        mainViewModel.setMessage(context)
         permissionLauncher.launch(Manifest.permission.RECORD_AUDIO)
     }
     Scaffold(
@@ -107,7 +117,41 @@ fun MainScreen(mainViewModel: MainViewModel = viewModel()) {
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = Color.Black
-                )
+                ),
+                actions = {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically
+                    ){
+                        Image(
+                            painter = painterResource(R.drawable.history),
+                            contentDescription = "",
+                            modifier = Modifier.size(24.dp).clickable{
+
+                            },
+                            colorFilter = ColorFilter.tint(Color.White)
+                        )
+                        Spacer(modifier = Modifier.width(10.dp))
+                        Icon(
+                            Icons.Default.Settings,
+                            contentDescription = "",
+                            modifier = Modifier.size(30.dp)
+                                .clickable{
+                                    isSettingDialog = true
+                                }
+                            ,
+                            tint = Color.White
+                        )
+                        Spacer(modifier = Modifier.width(10.dp))
+                        Image(
+                            painter = painterResource(R.drawable.newchat),
+                            contentDescription = "",
+                            modifier = Modifier.size(30.dp).clickable{
+                                
+                            },
+                            colorFilter = ColorFilter.tint(Color.White)
+                        )
+                    }
+                }
             )
         },
         bottomBar = {
@@ -124,6 +168,14 @@ fun MainScreen(mainViewModel: MainViewModel = viewModel()) {
                     ,
                     contentAlignment = Alignment.Center
                 ) {
+                    if(isSettingDialog){
+                        SettingDialog(langpref.getSelectedLanguageDisplayName(),{isSettingDialog = false}){ name , code ->
+                            langpref.saveSelectedLanguage(code,name)
+                            isSettingDialog = false
+                            Toast.makeText(context , "Selected Language : $name" , Toast.LENGTH_LONG).show()
+                            mainViewModel.setMessage(context)
+                        }
+                    }
                     if(isListening){
                         LottieAnimation(
                             composition = composition,
@@ -158,61 +210,4 @@ fun MainScreen(mainViewModel: MainViewModel = viewModel()) {
         }
     }
 }
-
-@Composable
-fun ChatBubble(message: String, isUser: Boolean) {
-    val backgroundColor = if (isUser) Color(0xFFDADADA) else Color(0xFFE0E0E0)
-    val alignment = if (isUser) Arrangement.End else Arrangement.Start
-
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 4.dp),
-        horizontalArrangement = alignment
-    ) {
-        Box(
-            modifier = Modifier
-                .background(
-                    color = backgroundColor,
-                    shape = RoundedCornerShape(16.dp)
-                )
-                .padding(12.dp)
-                .widthIn(max = 280.dp)
-        ) {
-            Text(
-                text = message,
-                color = Color.Black,
-                style = MaterialTheme.typography.bodyMedium
-            )
-        }
-    }
-}
-
-@Composable
-fun ListeningIndicator(partialText: String, isListening: Boolean) {
-    AnimatedVisibility(
-        visible = isListening && partialText.isNotBlank(),
-        enter = fadeIn() + slideInVertically(initialOffsetY = { it / 2 }),
-        exit = fadeOut() + slideOutVertically(targetOffsetY = { it / 2 })
-    ) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 230.dp)
-            ,
-            contentAlignment = Alignment.Center
-        ) {
-            Text(
-                text = partialText.trim(),
-                color = Color.White,
-                fontSize = 16.sp,
-                fontWeight = FontWeight.SemiBold,
-                modifier = Modifier
-                    .background(Color(0xFF1F1F1F), RoundedCornerShape(16.dp))
-                    .padding(horizontal = 16.dp, vertical = 10.dp)
-            )
-        }
-    }
-}
-
 

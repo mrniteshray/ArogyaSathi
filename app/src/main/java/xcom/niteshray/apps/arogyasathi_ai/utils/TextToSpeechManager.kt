@@ -9,11 +9,11 @@ class TextToSpeechManager(context: Context) {
     private var isInitialized = false
 
     init {
-        val hindi = Locale.forLanguageTag("en-US")
+        val lang = Locale.forLanguageTag(LanguagePreference(context).getSelectedLanguageCode())
 
         textToSpeech = TextToSpeech(context) { status ->
             if (status == TextToSpeech.SUCCESS) {
-                textToSpeech?.language = hindi
+                textToSpeech?.language = lang
                 textToSpeech?.setSpeechRate(1.0f)
                 textToSpeech?.setPitch(1.0f)
                 isInitialized = true

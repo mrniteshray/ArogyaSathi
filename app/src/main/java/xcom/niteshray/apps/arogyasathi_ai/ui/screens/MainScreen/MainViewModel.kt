@@ -4,7 +4,6 @@ import android.content.Context
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.ai.client.generativeai.GenerativeModel
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -14,6 +13,7 @@ import xcom.niteshray.apps.arogyasathi_ai.data.Api.GeminiService
 import xcom.niteshray.apps.arogyasathi_ai.data.model.Message
 import xcom.niteshray.apps.arogyasathi_ai.data.model.User
 import xcom.niteshray.apps.arogyasathi_ai.data.repository.UserRepo
+import xcom.niteshray.apps.arogyasathi_ai.utils.LanguagePreference
 import xcom.niteshray.apps.arogyasathi_ai.utils.SpeechRecognizerManager
 import xcom.niteshray.apps.arogyasathi_ai.utils.TextToSpeechManager
 
@@ -21,7 +21,6 @@ class MainViewModel : ViewModel() {
     private val userRepository = UserRepo()
     private val _fullText = MutableStateFlow("")
     val fullText: StateFlow<String> = _fullText.asStateFlow()
-
 
     private lateinit var textToSpeechManager: TextToSpeechManager
 
@@ -56,11 +55,10 @@ class MainViewModel : ViewModel() {
                         if(finalSegment.isNotEmpty()){
                             _messages.value = _messages.value + Message(finalSegment,true)
 
-                            val response = GeminiService().getResponseFromGemini(_messages.value,finalSegment)
+                            val response = GeminiService().getResponseFromGemini(_messages.value,finalSegment , context)
                             _messages.value = _messages.value + Message(response,false)
                             textToSpeechManager.speak(response)
                         }
-
 
                         _fullText.value += if (_fullText.value.endsWith(" ") || _fullText.value.isEmpty()) {
                             finalSegment
@@ -92,6 +90,23 @@ class MainViewModel : ViewModel() {
                 _partialText.value = ""
                 textToSpeechManager = TextToSpeechManager(context)
                 startListening(context)
+            }
+        }
+    }
+
+    fun setMessage(context: Context){
+        when(LanguagePreference(context).getSelectedLanguageDisplayName()){
+            "Hindi" -> {
+                _messages.value = emptyList<Message>()
+                _messages.value = _messages.value + Message("नमस्त! मैं आपकी क्या मदद कर सकता हूँ?",false)
+            }
+            "English" -> {
+                _messages.value = emptyList<Message>()
+                _messages.value = _messages.value + Message("Hello ,How may i help you!",false)
+            }
+            "Marathi" -> {
+                _messages.value = emptyList<Message>()
+                _messages.value = _messages.value + Message("नमस्कार! मी तुम्हाला कशी मदत करू शकेन?",false)
             }
         }
     }
