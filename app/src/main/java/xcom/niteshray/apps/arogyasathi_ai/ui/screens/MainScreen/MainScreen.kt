@@ -64,6 +64,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
@@ -75,7 +76,7 @@ import xcom.niteshray.apps.arogyasathi_ai.utils.LanguagePreference
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen(mainViewModel: MainViewModel = viewModel()) {
+fun MainScreen(navController: NavController,mainViewModel: MainViewModel = viewModel()) {
     var context = LocalContext.current
     val isListening by mainViewModel.isListening.collectAsState()
     val messages by mainViewModel.messages.collectAsState()
@@ -98,7 +99,6 @@ fun MainScreen(mainViewModel: MainViewModel = viewModel()) {
     }
 
     LaunchedEffect(Unit) {
-        mainViewModel.setMessage(context)
         permissionLauncher.launch(Manifest.permission.RECORD_AUDIO)
     }
     Scaffold(
@@ -126,7 +126,7 @@ fun MainScreen(mainViewModel: MainViewModel = viewModel()) {
                             painter = painterResource(R.drawable.history),
                             contentDescription = "",
                             modifier = Modifier.size(24.dp).clickable{
-
+                                navController.navigate("History")
                             },
                             colorFilter = ColorFilter.tint(Color.White)
                         )

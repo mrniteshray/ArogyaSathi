@@ -74,10 +74,10 @@ class UserRepo {
         }
     }
 
-    fun getChats(userId: String): Flow<List<Chat>> = flow {
+    fun getChats(userId: String?): Flow<List<Chat>> = flow {
         try {
             val snapshot = firebaseFirestore.collection("Users")
-                .document(userId)
+                .document(userId!!)
                 .collection("chats")
                 .orderBy("createdAt", com.google.firebase.firestore.Query.Direction.DESCENDING)
                 .get()
