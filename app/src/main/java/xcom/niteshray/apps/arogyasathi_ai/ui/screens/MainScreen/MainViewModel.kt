@@ -20,7 +20,6 @@ import xcom.niteshray.apps.arogyasathi_ai.utils.TextToSpeechManager
 class MainViewModel : ViewModel() {
     private val userRepository = UserRepo()
     private val _fullText = MutableStateFlow("")
-    val fullText: StateFlow<String> = _fullText.asStateFlow()
 
     private lateinit var textToSpeechManager: TextToSpeechManager
 
@@ -35,6 +34,10 @@ class MainViewModel : ViewModel() {
 
     private val _messages = MutableStateFlow<List<Message>>(emptyList())
     val messages: StateFlow<List<Message>> = _messages.asStateFlow()
+
+    private val _currentChatId = MutableStateFlow<String?>(null)
+    val currentChatId: StateFlow<String?> = _currentChatId.asStateFlow()
+
 
     private lateinit var speechRecognizerManager: SpeechRecognizerManager
 
@@ -55,8 +58,19 @@ class MainViewModel : ViewModel() {
                         if(finalSegment.isNotEmpty()){
                             _messages.value = _messages.value + Message(finalSegment,true)
 
+
+
+                            if(_currentChatId.value == null){
+                                val chatId = userRepository.SaveChat(user.value?.uid ?: "Null",finalSegment , messages.value)
+                                _currentChatId.value = chatId
+                            }else{
+                                userRepository.UpdateChat(user.value!!.uid,currentChatId.value!! , messages.value)
+                            }
+
                             val response = GeminiService().getResponseFromGemini(_messages.value,finalSegment , context)
                             _messages.value = _messages.value + Message(response,false)
+
+                            userRepository.UpdateChat(user.value!!.uid, _currentChatId.value ?: "", _messages.value)
                             textToSpeechManager.speak(response)
                         }
 
