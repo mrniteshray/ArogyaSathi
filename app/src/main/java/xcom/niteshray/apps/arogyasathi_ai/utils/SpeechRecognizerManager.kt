@@ -48,10 +48,6 @@ class SpeechRecognizerManager(private val context: Context) {
             override fun onResults(results: Bundle?) {
                 val result = results?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)?.get(0)
                 result?.let { onFinalResult(it) }
-
-                if (!isManuallyStopped) {
-                    restartListeningWithDelay()
-                }
             }
 
             override fun onError(error: Int) {
@@ -69,9 +65,6 @@ class SpeechRecognizerManager(private val context: Context) {
 
                 onError(errorMessage)
 
-                if (!isManuallyStopped) {
-                    restartListeningWithDelay()
-                }
             }
 
             override fun onEndOfSpeech() {}
@@ -79,14 +72,6 @@ class SpeechRecognizerManager(private val context: Context) {
         })
 
         speechRecognizer.startListening(recognitionIntent)
-    }
-
-    private fun restartListeningWithDelay() {
-        Handler(Looper.getMainLooper()).postDelayed({
-            if (!isManuallyStopped) {
-                speechRecognizer.startListening(recognitionIntent)
-            }
-        }, 100)
     }
 
     fun stopListening() {

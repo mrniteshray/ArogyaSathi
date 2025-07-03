@@ -54,7 +54,7 @@ import xcom.niteshray.apps.arogyasathi_ai.utils.LanguagePreference
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen(navController: NavController,mainViewModel: MainViewModel = viewModel<MainViewModel>()) {
+fun MainScreen(navController: NavController, mainViewModel: MainViewModel = viewModel<MainViewModel>(factory = MainViewModel.Factory(LocalContext.current))) {
     var context = LocalContext.current
     val isListening by mainViewModel.isListening.collectAsState()
     val messages by mainViewModel.messages.collectAsState()
