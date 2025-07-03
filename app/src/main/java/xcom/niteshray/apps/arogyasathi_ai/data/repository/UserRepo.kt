@@ -45,7 +45,7 @@ class UserRepo {
         val chat = Chat(
             chatId = chatId,
             title = title.take(50),
-            messages = messages.map { Message(it.message, it.isUser) }
+            messages = messages.map { Message(it.message, it.user) }
         )
         firebaseFirestore.collection("Users")
             .document(userId)
@@ -69,7 +69,7 @@ class UserRepo {
                 .document(userId)
                 .collection("chats")
                 .document(chatId)
-                .update("messages", messages.map { Message( it.message, isUser = it.isUser) })
+                .update("messages", messages.map { Message( it.message, it.user) })
                 .await()
         }
     }

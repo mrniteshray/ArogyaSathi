@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import xcom.niteshray.apps.arogyasathi_ai.ui.screens.ChatDetailScreen.ChatDetailScreen
 import xcom.niteshray.apps.arogyasathi_ai.ui.screens.History.HistoryScreen
 import xcom.niteshray.apps.arogyasathi_ai.ui.screens.MainScreen.MainScreen
 import xcom.niteshray.apps.arogyasathi_ai.ui.screens.SignInScreen.SignInScreen
@@ -41,7 +42,11 @@ fun App(){
         }
 
         composable(route = "History"){
-            HistoryScreen()
+            HistoryScreen(navController)
+        }
+        composable("chat_detail/{chatId}") { backStackEntry ->
+            val chatId = backStackEntry.arguments?.getString("chatId") ?: ""
+            ChatDetailScreen(navController = navController, chatId = chatId)
         }
     }
 }

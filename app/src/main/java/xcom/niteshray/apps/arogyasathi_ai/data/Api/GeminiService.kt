@@ -21,7 +21,7 @@ class GeminiService {
     fun getPrompt(messages: List<Message> , userPrompt: String , context: Context) : String{
 
         val chatHistory = messages.joinToString("\n") { message ->
-            val sender = if (message.isUser) "User" else "Assistant"
+            val sender = if (message.user) "User" else "Assistant"
             "$sender: ${message.message}"
         }
         return """

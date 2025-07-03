@@ -2,6 +2,7 @@ package xcom.niteshray.apps.arogyasathi_ai.ui.screens.History
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -33,13 +34,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.*
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import xcom.niteshray.apps.arogyasathi_ai.R
 import xcom.niteshray.apps.arogyasathi_ai.data.model.Chat
 import xcom.niteshray.apps.arogyasathi_ai.ui.theme.graycolor
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HistoryScreen( viewModel: HistoryViewModel = viewModel()){
+fun HistoryScreen(navController: NavController,viewModel: HistoryViewModel = viewModel()){
     val chats by viewModel.chat.collectAsState()
     Scaffold(
         topBar = {
@@ -82,7 +84,7 @@ fun HistoryScreen( viewModel: HistoryViewModel = viewModel()){
                     Text(
                         text = "no Chats Available",
                         color = Color.White,
-                        fontSize = 18.sp, // Make it a bit more prominent
+                        fontSize = 18.sp,
                         textAlign = TextAlign.Center
                     )
                 }
@@ -92,7 +94,9 @@ fun HistoryScreen( viewModel: HistoryViewModel = viewModel()){
                 ) {
                     items(chats!!.size){ index->
                         val chat = chats!![index]
-                        HistoryIems(chat)
+                        HistoryIems(chat){
+                            navController.navigate("chat_detail/${chat.chatId}")
+                        }
                     }
                 }
             }
@@ -101,12 +105,14 @@ fun HistoryScreen( viewModel: HistoryViewModel = viewModel()){
 }
 
 @Composable
-fun HistoryIems(chat : Chat) {
+fun HistoryIems(chat : Chat , onClick : (chat : Chat) -> Unit) {
     Box(
         Modifier.fillMaxWidth().padding(12.dp).background(
             color = graycolor,
             shape = RoundedCornerShape(12.dp)
-        ).padding(12.dp)
+        ).padding(12.dp).clickable{
+            onClick(chat)
+        }
     ){
         Row(
             modifier = Modifier.fillMaxWidth()

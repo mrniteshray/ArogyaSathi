@@ -5,7 +5,7 @@ import java.util.Date
 
 data class Message(
     val message : String,
-    val isUser : Boolean
+    val user : Boolean
 ){
     constructor() : this ("",false)
 }

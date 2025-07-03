@@ -17,7 +17,7 @@ import xcom.niteshray.apps.arogyasathi_ai.utils.LanguagePreference
 import xcom.niteshray.apps.arogyasathi_ai.utils.SpeechRecognizerManager
 import xcom.niteshray.apps.arogyasathi_ai.utils.TextToSpeechManager
 
-class MainViewModel : ViewModel() {
+class MainViewModel() : ViewModel() {
     private val userRepository = UserRepo()
     private val _fullText = MutableStateFlow("")
 
@@ -57,8 +57,6 @@ class MainViewModel : ViewModel() {
                         Log.d("Speechkadekh", "Final: $finalSegment")
                         if(finalSegment.isNotEmpty()){
                             _messages.value = _messages.value + Message(finalSegment,true)
-
-
 
                             if(_currentChatId.value == null){
                                 val chatId = userRepository.SaveChat(user.value?.uid ?: "Null",finalSegment , messages.value)
@@ -106,6 +104,24 @@ class MainViewModel : ViewModel() {
                 startListening(context)
             }
         }
+    }
+
+    fun CreateNewChat(context: Context){
+        when(LanguagePreference(context).getSelectedLanguageDisplayName()){
+            "Hindi" -> {
+                _messages.value = emptyList<Message>()
+                _messages.value = _messages.value + Message("नमस्त! मैं आपकी क्या मदद कर सकता हूँ?",false)
+            }
+            "English" -> {
+                _messages.value = emptyList<Message>()
+                _messages.value = _messages.value + Message("Hello ,How may i help you!",false)
+            }
+            "Marathi" -> {
+                _messages.value = emptyList<Message>()
+                _messages.value = _messages.value + Message("नमस्कार! मी तुम्हाला कशी मदत करू शकेन?",false)
+            }
+        }
+        _currentChatId.value = null
     }
 
     fun setMessage(context: Context){
