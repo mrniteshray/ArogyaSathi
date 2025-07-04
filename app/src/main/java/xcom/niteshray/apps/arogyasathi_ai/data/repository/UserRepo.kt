@@ -14,7 +14,7 @@ class UserRepo {
     private val firebaseFirestore = FirebaseFirestore.getInstance()
     suspend fun fetchUser(userId: String): User? {
         return try {
-            val snapshot = firebaseFirestore.collection("Users")
+            val snapshot = firebaseFirestore.collection("users")
                 .document(userId)
                 .get()
                 .await()
@@ -37,7 +37,7 @@ class UserRepo {
     }
 
     suspend fun SaveChat(userId : String , title : String , messages : List<Message>) : String {
-        val chatId = firebaseFirestore.collection("Users")
+        val chatId = firebaseFirestore.collection("users")
             .document(userId)
             .collection("chats")
             .document()
@@ -47,7 +47,7 @@ class UserRepo {
             title = title.take(50),
             messages = messages.map { Message(it.message, it.user) }
         )
-        firebaseFirestore.collection("Users")
+        firebaseFirestore.collection("users")
             .document(userId)
             .collection("chats")
             .document(chatId)
@@ -57,7 +57,7 @@ class UserRepo {
     }
 
     suspend fun UpdateChat(userId: String , chatId : String , messages :List<Message>){
-        val chat = firebaseFirestore.collection("Users")
+        val chat = firebaseFirestore.collection("users")
             .document(userId)
             .collection("chats")
             .document(chatId)
@@ -65,7 +65,7 @@ class UserRepo {
             .await()
             .toObject(Chat::class.java)
         if (chat != null) {
-            firebaseFirestore.collection("Users")
+            firebaseFirestore.collection("users")
                 .document(userId)
                 .collection("chats")
                 .document(chatId)
@@ -76,7 +76,7 @@ class UserRepo {
 
     fun getChats(userId: String?): Flow<List<Chat>> = flow {
         try {
-            val snapshot = firebaseFirestore.collection("Users")
+            val snapshot = firebaseFirestore.collection("users")
                 .document(userId!!)
                 .collection("chats")
                 .orderBy("createdAt", com.google.firebase.firestore.Query.Direction.DESCENDING)

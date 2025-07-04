@@ -59,6 +59,7 @@ class MainViewModel(context: Context) : ViewModel() {
                     _messages.value = _messages.value + Message("नमस्कार! मी तुम्हाला कशी मदत करू शकेन?",false)
                 }
             }
+            textToSpeechManager = TextToSpeechManager(context)
             _user.value = userRepository.fetchUser(FirebaseAuth.getInstance().currentUser!!.uid)
         }
     }
@@ -68,8 +69,8 @@ class MainViewModel(context: Context) : ViewModel() {
             startListening(
                 onFinalResult = { finalSegment ->
                     viewModelScope.launch {
-                        Log.d("Speechkadekh", "Final: $finalSegment")
                         if(finalSegment.isNotEmpty()){
+                            _isListening.value = false
                             _messages.value = _messages.value + Message(finalSegment,true)
 
                             if(_currentChatId.value == null){
@@ -83,18 +84,13 @@ class MainViewModel(context: Context) : ViewModel() {
                                 _messages.value = _messages.value + Message(response, false)
                                 userRepository.UpdateChat(_user.value!!.uid, _currentChatId.value ?: "", _messages.value)
                                 textToSpeechManager.speak(response)
-                                toggleListening(context)
-
                             } catch (e: Exception) {
                                 val errorMessage = when (LanguagePreference(context).getSelectedLanguageDisplayName()) {
                                     "Hindi" -> "माफ करें, सर्वर में त्रुटि हुई। कृपया बाद में पुनः प्रयास करें।"
                                     "Marathi" -> "माफ करा, सर्व्हरमध्ये त्रुटी आली. कृपया नंतर पुन्हा प्रयत्न करा."
                                     else -> "Sorry, there was a server error. Please try again later."
                                 }
-                                _messages.value = _messages.value + Message(errorMessage, false)
                                 textToSpeechManager.speak(errorMessage)
-                                toggleListening(context)
-
                             }
                         }
 
@@ -111,8 +107,7 @@ class MainViewModel(context: Context) : ViewModel() {
                         _partialText.value = " $partial"
                     }
                 },
-                onError = {
-
+                onError = { errorMessage ->
                 }
             )
         }
@@ -126,7 +121,6 @@ class MainViewModel(context: Context) : ViewModel() {
                 _isListening.value = true
                 _fullText.value = ""
                 _partialText.value = ""
-                textToSpeechManager = TextToSpeechManager(context)
                 startListening(context)
             }
         }
@@ -147,6 +141,7 @@ class MainViewModel(context: Context) : ViewModel() {
                 _messages.value = _messages.value + Message("नमस्कार! मी तुम्हाला कशी मदत करू शकेन?",false)
             }
         }
+        textToSpeechManager.destroy()
         _currentChatId.value = null
     }
 

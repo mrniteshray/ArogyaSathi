@@ -63,7 +63,7 @@ fun MainScreen(navController: NavController, mainViewModel: MainViewModel = view
     val progress by animateLottieCompositionAsState(
         composition = composition,
         iterations = LottieConstants.IterateForever,
-        isPlaying = true,
+        isPlaying = isListening,
         speed = 2f
     )
     val langpref = LanguagePreference(context)

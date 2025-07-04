@@ -10,6 +10,7 @@ import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
 import java.util.Locale
 
+// SpeechRecognizerManager.kt
 class SpeechRecognizerManager(private val context: Context) {
     private val speechRecognizer = SpeechRecognizer.createSpeechRecognizer(context)
     private var onFinalResult: (String) -> Unit = {}
@@ -19,7 +20,6 @@ class SpeechRecognizerManager(private val context: Context) {
 
     private val recognitionIntent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
         putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
-        putExtra(RecognizerIntent.EXTRA_LANGUAGE, LanguagePreference(context).getSelectedLanguageCode())
         putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true)
     }
 
@@ -33,12 +33,14 @@ class SpeechRecognizerManager(private val context: Context) {
         this.onError = onError
         isManuallyStopped = false
 
+        recognitionIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, LanguagePreference(context).getSelectedLanguageCode())
+
         speechRecognizer.setRecognitionListener(object : RecognitionListener {
             override fun onReadyForSpeech(params: Bundle?) {}
-            override fun onBeginningOfSpeech() { }
-
+            override fun onBeginningOfSpeech() {}
             override fun onRmsChanged(rmsdB: Float) {}
             override fun onBufferReceived(buffer: ByteArray?) {}
+            override fun onEndOfSpeech() {}
 
             override fun onPartialResults(partialResults: Bundle?) {
                 val partial = partialResults?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)?.get(0)
@@ -47,27 +49,31 @@ class SpeechRecognizerManager(private val context: Context) {
 
             override fun onResults(results: Bundle?) {
                 val result = results?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)?.get(0)
-                result?.let { onFinalResult(it) }
+                result?.let {
+                    onFinalResult(it)
+                    if (!isManuallyStopped) {
+                        speechRecognizer.stopListening()
+                    }
+                }
             }
 
             override fun onError(error: Int) {
-                val errorMessage = when (error) {
-                    SpeechRecognizer.ERROR_NETWORK_TIMEOUT -> "Network timeout"
-                    SpeechRecognizer.ERROR_NETWORK -> "Network error"
-                    SpeechRecognizer.ERROR_AUDIO -> "Audio error"
-                    SpeechRecognizer.ERROR_SERVER -> "Server error"
-                    SpeechRecognizer.ERROR_CLIENT -> "Client error"
-                    SpeechRecognizer.ERROR_SPEECH_TIMEOUT -> "No speech input"
-                    SpeechRecognizer.ERROR_NO_MATCH -> "Didn't catch that, try again"
-                    SpeechRecognizer.ERROR_RECOGNIZER_BUSY -> "Recognizer is busy"
-                    else -> "Unknown error"
+                if (!isManuallyStopped) {
+                    val errorMessage = when (error) {
+                        SpeechRecognizer.ERROR_NETWORK_TIMEOUT -> "Network timeout"
+                        SpeechRecognizer.ERROR_NETWORK -> "Network error"
+                        SpeechRecognizer.ERROR_AUDIO -> "Audio error"
+                        SpeechRecognizer.ERROR_SERVER -> "Server error"
+                        SpeechRecognizer.ERROR_CLIENT -> "Client error"
+                        SpeechRecognizer.ERROR_SPEECH_TIMEOUT -> "No speech input"
+                        SpeechRecognizer.ERROR_NO_MATCH -> "Didn't catch that, try again"
+                        SpeechRecognizer.ERROR_RECOGNIZER_BUSY -> "Recognizer is busy"
+                        else -> "Unknown error"
+                    }
+                    onError(errorMessage)
                 }
-
-                onError(errorMessage)
-
             }
 
-            override fun onEndOfSpeech() {}
             override fun onEvent(eventType: Int, params: Bundle?) {}
         })
 
