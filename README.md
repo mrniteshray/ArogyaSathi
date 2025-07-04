@@ -26,6 +26,7 @@ ArogyaSathi is an AI-powered multilingual voice health assistant that helps user
 - **Architecture**: MVVM
 - **UI**: XML
 - **Voice Input**: Android SpeechRecognizer
+- **Voice Output**: Android Text-To-Speech
 - **AI Backend**: Gemini API (Google)
 - **Authentication**: Google Sign-In via Credential Manager API
 - **Database**: Firebase Firestore
