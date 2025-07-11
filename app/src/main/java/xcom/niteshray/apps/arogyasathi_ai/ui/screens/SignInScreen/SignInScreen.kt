@@ -39,6 +39,7 @@ fun SignInScreen(navController : NavController) {
     val scope = rememberCoroutineScope()
     val currentuser = FirebaseAuth.getInstance().currentUser
 
+
     if(currentuser!= null){
         navController.navigate("MainScreen")
     }
@@ -51,7 +52,9 @@ fun SignInScreen(navController : NavController) {
             scope = scope,
             launcher = null,
             login = {
+                navController.popBackStack()
                 navController.navigate("MainScreen")
+                navController.popBackStack()
                 Toast.makeText(context, "Login successful", Toast.LENGTH_SHORT).show()
 
             }
@@ -80,6 +83,7 @@ fun SignInScreen(navController : NavController) {
                         launcher = launcher,
                         login = {
                             navController.navigate("MainScreen")
+                            navController.popBackStack()
                             Toast.makeText(context, "Login successful", Toast.LENGTH_SHORT).show()
                         }
                     )

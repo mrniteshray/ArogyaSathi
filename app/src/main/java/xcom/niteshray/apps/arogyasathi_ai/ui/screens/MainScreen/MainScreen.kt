@@ -179,7 +179,6 @@ fun MainScreen(navController: NavController, mainViewModel: MainViewModel = view
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(12.dp)
         ) {
             items(messages.size) { index ->
                 val (message, isUser) = messages[index]
@@ -188,4 +187,3 @@ fun MainScreen(navController: NavController, mainViewModel: MainViewModel = view
         }
     }
 }
-

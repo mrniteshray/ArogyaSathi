@@ -45,18 +45,54 @@ class MainViewModel(context: Context) : ViewModel() {
 
     init {
         viewModelScope.launch {
-            when(LanguagePreference(context).getSelectedLanguageDisplayName()){
+            when (LanguagePreference(context).getSelectedLanguageDisplayName()) {
                 "Hindi" -> {
                     _messages.value = emptyList<Message>()
-                    _messages.value = _messages.value + Message("नमस्त! मैं आपकी क्या मदद कर सकता हूँ?",false)
+                    _messages.value = _messages.value + Message("नमस्ते! मैं आपकी क्या मदद कर सकता हूँ?", false)
                 }
                 "English" -> {
                     _messages.value = emptyList<Message>()
-                    _messages.value = _messages.value + Message("Hello ,How may i help you!",false)
+                    _messages.value = _messages.value + Message("Hello, How may I help you!", false)
                 }
                 "Marathi" -> {
                     _messages.value = emptyList<Message>()
-                    _messages.value = _messages.value + Message("नमस्कार! मी तुम्हाला कशी मदत करू शकेन?",false)
+                    _messages.value = _messages.value + Message("नमस्कार! मी तुम्हाला कशी मदत करू शकेन?", false)
+                }
+                "Tamil" -> {
+                    _messages.value = emptyList<Message>()
+                    _messages.value = _messages.value + Message("வணக்கம்! நான் உங்களுக்கு எப்படி உதவ முடியும்?", false)
+                }
+                "Telugu" -> {
+                    _messages.value = emptyList<Message>()
+                    _messages.value = _messages.value + Message("హాయ్! నేను మీకు ఎలా సహాయపడగలను?", false)
+                }
+                "Malayalam" -> {
+                    _messages.value = emptyList<Message>()
+                    _messages.value = _messages.value + Message("ഹായ്! ഞാൻ എങ്ങനെ നിനക്ക് സഹായിക്കാം?", false)
+                }
+                "Kannada" -> {
+                    _messages.value = emptyList<Message>()
+                    _messages.value = _messages.value + Message("ನಮಸ್ಕಾರ! ನಾನು ನಿನಗೆ ಹೇಗೆ ಸಹಾಯ ಮಾಡಬಹುದು?", false)
+                }
+                "Bengali" -> {
+                    _messages.value = emptyList<Message>()
+                    _messages.value = _messages.value + Message("নমস্কার! আমি কীভাবে আপনাকে সাহায্য করতে পারি?", false)
+                }
+                "Gujarati" -> {
+                    _messages.value = emptyList<Message>()
+                    _messages.value = _messages.value + Message("નમસ્તે! હું તમને કેવી રીતે મદદ કરી શકું?", false)
+                }
+                "Punjabi" -> {
+                    _messages.value = emptyList<Message>()
+                    _messages.value = _messages.value + Message("ਸਤ ਸ੍ਰੀ ਅਕਾਲ! ਮੈਂ ਤੁਹਾਡੀ ਕਿਵੇਂ ਮਦਦ ਕਰ ਸਕਦਾ ਹਾਂ?", false)
+                }
+                "Urdu" -> {
+                    _messages.value = emptyList<Message>()
+                    _messages.value = _messages.value + Message("سلام! میں آپ کی کیسے مدد کر سکتا ہوں؟", false)
+                }
+                "English (Indian)" -> {
+                    _messages.value = emptyList<Message>()
+                    _messages.value = _messages.value + Message("Namaste, How may I help you!", false)
                 }
             }
             textToSpeechManager = TextToSpeechManager(context)
@@ -70,6 +106,7 @@ class MainViewModel(context: Context) : ViewModel() {
                 onFinalResult = { finalSegment ->
                     viewModelScope.launch {
                         if(finalSegment.isNotEmpty()){
+                            textToSpeechManager = TextToSpeechManager(context)
                             _isListening.value = false
                             _messages.value = _messages.value + Message(finalSegment,true)
 
@@ -127,18 +164,54 @@ class MainViewModel(context: Context) : ViewModel() {
     }
 
     fun CreateNewChat(context: Context){
-        when(LanguagePreference(context).getSelectedLanguageDisplayName()){
+        when (LanguagePreference(context).getSelectedLanguageDisplayName()) {
             "Hindi" -> {
                 _messages.value = emptyList<Message>()
-                _messages.value = _messages.value + Message("नमस्त! मैं आपकी क्या मदद कर सकता हूँ?",false)
+                _messages.value = _messages.value + Message("नमस्ते! मैं आपकी क्या मदद कर सकता हूँ?", false)
             }
             "English" -> {
                 _messages.value = emptyList<Message>()
-                _messages.value = _messages.value + Message("Hello ,How may i help you!",false)
+                _messages.value = _messages.value + Message("Hello, How may I help you!", false)
             }
             "Marathi" -> {
                 _messages.value = emptyList<Message>()
-                _messages.value = _messages.value + Message("नमस्कार! मी तुम्हाला कशी मदत करू शकेन?",false)
+                _messages.value = _messages.value + Message("नमस्कार! मी तुम्हाला कशी मदत करू शकेन?", false)
+            }
+            "Tamil" -> {
+                _messages.value = emptyList<Message>()
+                _messages.value = _messages.value + Message("வணக்கம்! நான் உங்களுக்கு எப்படி உதவ முடியும்?", false)
+            }
+            "Telugu" -> {
+                _messages.value = emptyList<Message>()
+                _messages.value = _messages.value + Message("హాయ్! నేను మీకు ఎలా సహాయపడగలను?", false)
+            }
+            "Malayalam" -> {
+                _messages.value = emptyList<Message>()
+                _messages.value = _messages.value + Message("ഹായ്! ഞാൻ എങ്ങനെ നിനക്ക് സഹായിക്കാം?", false)
+            }
+            "Kannada" -> {
+                _messages.value = emptyList<Message>()
+                _messages.value = _messages.value + Message("ನಮಸ್ಕಾರ! ನಾನು ನಿನಗೆ ಹೇಗೆ ಸಹಾಯ ಮಾಡಬಹುದು?", false)
+            }
+            "Bengali" -> {
+                _messages.value = emptyList<Message>()
+                _messages.value = _messages.value + Message("নমস্কার! আমি কীভাবে আপনাকে সাহায্য করতে পারি?", false)
+            }
+            "Gujarati" -> {
+                _messages.value = emptyList<Message>()
+                _messages.value = _messages.value + Message("નમસ્તે! હું તમને કેવી રીતે મદદ કરી શકું?", false)
+            }
+            "Punjabi" -> {
+                _messages.value = emptyList<Message>()
+                _messages.value = _messages.value + Message("ਸਤ ਸ੍ਰੀ ਅਕਾਲ! ਮੈਂ ਤੁਹਾਡੀ ਕਿਵੇਂ ਮਦਦ ਕਰ ਸਕਦਾ ਹਾਂ?", false)
+            }
+            "Urdu" -> {
+                _messages.value = emptyList<Message>()
+                _messages.value = _messages.value + Message("سلام! میں آپ کی کیسے مدد کر سکتا ہوں؟", false)
+            }
+            "English (Indian)" -> {
+                _messages.value = emptyList<Message>()
+                _messages.value = _messages.value + Message("Namaste, How may I help you!", false)
             }
         }
         textToSpeechManager.destroy()
@@ -146,18 +219,54 @@ class MainViewModel(context: Context) : ViewModel() {
     }
 
     fun setMessage(context: Context){
-        when(LanguagePreference(context).getSelectedLanguageDisplayName()){
+        when (LanguagePreference(context).getSelectedLanguageDisplayName()) {
             "Hindi" -> {
                 _messages.value = emptyList<Message>()
-                _messages.value = _messages.value + Message("नमस्त! मैं आपकी क्या मदद कर सकता हूँ?",false)
+                _messages.value = _messages.value + Message("नमस्ते! मैं आपकी क्या मदद कर सकता हूँ?", false)
             }
             "English" -> {
                 _messages.value = emptyList<Message>()
-                _messages.value = _messages.value + Message("Hello ,How may i help you!",false)
+                _messages.value = _messages.value + Message("Hello, How may I help you!", false)
             }
             "Marathi" -> {
                 _messages.value = emptyList<Message>()
-                _messages.value = _messages.value + Message("नमस्कार! मी तुम्हाला कशी मदत करू शकेन?",false)
+                _messages.value = _messages.value + Message("नमस्कार! मी तुम्हाला कशी मदत करू शकेन?", false)
+            }
+            "Tamil" -> {
+                _messages.value = emptyList<Message>()
+                _messages.value = _messages.value + Message("வணக்கம்! நான் உங்களுக்கு எப்படி உதவ முடியும்?", false)
+            }
+            "Telugu" -> {
+                _messages.value = emptyList<Message>()
+                _messages.value = _messages.value + Message("హాయ్! నేను మీకు ఎలా సహాయపడగలను?", false)
+            }
+            "Malayalam" -> {
+                _messages.value = emptyList<Message>()
+                _messages.value = _messages.value + Message("ഹായ്! ഞാൻ എങ്ങനെ നിനക്ക് സഹായിക്കാം?", false)
+            }
+            "Kannada" -> {
+                _messages.value = emptyList<Message>()
+                _messages.value = _messages.value + Message("ನಮಸ್ಕಾರ! ನಾನು ನಿನಗೆ ಹೇಗೆ ಸಹಾಯ ಮಾಡಬಹುದು?", false)
+            }
+            "Bengali" -> {
+                _messages.value = emptyList<Message>()
+                _messages.value = _messages.value + Message("নমস্কার! আমি কীভাবে আপনাকে সাহায্য করতে পারি?", false)
+            }
+            "Gujarati" -> {
+                _messages.value = emptyList<Message>()
+                _messages.value = _messages.value + Message("નમસ્તે! હું તમને કેવી રીતે મદદ કરી શકું?", false)
+            }
+            "Punjabi" -> {
+                _messages.value = emptyList<Message>()
+                _messages.value = _messages.value + Message("ਸਤ ਸ੍ਰੀ ਅਕਾਲ! ਮੈਂ ਤੁਹਾਡੀ ਕਿਵੇਂ ਮਦਦ ਕਰ ਸਕਦਾ ਹਾਂ?", false)
+            }
+            "Urdu" -> {
+                _messages.value = emptyList<Message>()
+                _messages.value = _messages.value + Message("سلام! میں آپ کی کیسے مدد کر سکتا ہوں؟", false)
+            }
+            "English (Indian)" -> {
+                _messages.value = emptyList<Message>()
+                _messages.value = _messages.value + Message("Namaste, How may I help you!", false)
             }
         }
     }

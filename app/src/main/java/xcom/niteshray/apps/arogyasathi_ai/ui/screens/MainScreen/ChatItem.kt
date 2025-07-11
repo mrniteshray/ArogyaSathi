@@ -12,12 +12,31 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
 @Composable
 fun ChatBubble(message: String, isUser: Boolean) {
-    val backgroundColor = if (isUser) Color(0xFFDADADA) else Color(0xFFE0E0E0)
+    val brush = if (isUser) {
+        Brush.horizontalGradient(
+            colors = listOf(
+                Color(0xFF1E90FF),
+                Color(0xFF42A0FD)
+            ),
+            startX = 0f,
+            endX = Float.POSITIVE_INFINITY
+        )
+    } else {
+        Brush.horizontalGradient(
+            colors = listOf(
+                Color(0xFF383838),
+                Color(0xFF383838),
+            ),
+            startX = 0f,
+            endX = Float.POSITIVE_INFINITY
+        )
+    }
     val alignment = if (isUser) Arrangement.End else Arrangement.Start
 
     Row(
@@ -29,7 +48,7 @@ fun ChatBubble(message: String, isUser: Boolean) {
         Box(
             modifier = Modifier
                 .background(
-                    color = backgroundColor,
+                    brush,
                     shape = RoundedCornerShape(16.dp)
                 )
                 .padding(12.dp)
@@ -37,7 +56,7 @@ fun ChatBubble(message: String, isUser: Boolean) {
         ) {
             Text(
                 text = message,
-                color = Color.Black,
+                color = Color.White,
                 style = MaterialTheme.typography.bodyMedium
             )
         }

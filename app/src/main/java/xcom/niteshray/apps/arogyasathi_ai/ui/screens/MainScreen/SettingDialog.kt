@@ -32,11 +32,18 @@ fun SettingDialog(
     onConfirm: (displayName: String, languageCode: String) -> Unit
 ) {
 
-    val context = LocalContext.current
     val languageMap = mapOf(
         "Hindi" to "hi-IN",
         "English" to "en-US",
-        "Marathi" to "mr-IN"
+        "Marathi" to "mr-IN",
+        "Tamil" to "ta-IN",
+        "Telugu" to "te-IN",
+        "Malayalam" to "ml-IN",
+        "Kannada" to "kn-IN",
+        "Bengali" to "bn-IN",
+        "Gujarati" to "gu-IN",
+        "Punjabi" to "pa-IN",
+        "English (Indian)" to "en-IN"
     )
     val languages = languageMap.keys.toList()
     var expanded by remember { mutableStateOf(false) }

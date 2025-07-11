@@ -21,7 +21,7 @@ fun GradientButton(text : String, onClick: () -> Unit){
         modifier = Modifier.clip(RoundedCornerShape(12.dp))
             .background(
                 brush = Brush.horizontalGradient(
-                    listOf(Color(0xFF14F5F7), Color(0xFF00C6FF)))
+                    listOf(Color(0xFF1D36D1), Color(0xFF6D79CC)))
                 )
             .clickable{
                 onClick()

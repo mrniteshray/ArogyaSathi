@@ -66,10 +66,10 @@ class GoogleSignInHelper {
                                 photoUrl = (user.photoUrl?.toString() ?: ""),
                             )
                             UserRepo().saveUserData(user)
+                            login()
                         }
                     }
                 } catch (e: NoCredentialException) {
-                    // Open Google Account add page
                     launcher?.launch(getIntent())
                 } catch (e: Exception) {
                     e.printStackTrace()
