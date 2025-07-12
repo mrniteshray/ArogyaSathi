@@ -1,6 +1,16 @@
-# 🤖 ArogyaSathi – AI Voice Health Assistant
+<h1 align="center">🤖 ArogyaSathi – AI Voice Health Assistant</h1>
 
-ArogyaSathi is an AI-powered multilingual voice health assistant that helps users ask health-related queries using voice in **Hindi**, **English**, or **Marathi**. Built natively in Kotlin, it leverages **Google's Gemini API** for generating intelligent responses and uses **Firebase Firestore** for storing chat history.
+<p align="center">
+  <img src="https://img.shields.io/badge/Built%20With-Kotlin-blue.svg" />
+  <img src="https://img.shields.io/badge/Platform-Android-green.svg" />
+  <img src="https://img.shields.io/badge/Made%20by-Nitesh%20Ray-orange.svg" />
+</p>
+
+ArogyaSathi is an AI-powered multilingual voice health assistant that helps users ask health-related queries using voice in multiple languages. Built natively in Kotlin, it leverages **Google's Gemini API** for generating intelligent responses and uses **Firebase Firestore** for storing chat history.
+
+---
+
+![Banner](screenshots/banner.png)
 
 ---
 
@@ -17,7 +27,16 @@ ArogyaSathi is an AI-powered multilingual voice health assistant that helps user
 ---
 
 ## 📸 Screenshots
-
+<table>
+  <tr>
+    <td><img src="screenshots/signin.png" width="400px"></td>
+    <td><img src="screenshots/main.png" width="400px"></td>
+  </tr>
+  <tr>
+    <td><img src="screenshots/history.png" width="400px"></td>
+    <td><img src="screenshots/STT.png" width="400px"></td>
+  </tr>
+</table>
 ---
 
 ## 🛠️ Tech Stack
@@ -31,3 +50,6 @@ ArogyaSathi is an AI-powered multilingual voice health assistant that helps user
 - **Authentication**: Google Sign-In via Credential Manager API
 - **Database**: Firebase Firestore
 - **Multilingual Support**: Locale & Language config
+
+## Download 
+- Download latest version from releases
