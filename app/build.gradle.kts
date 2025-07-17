@@ -56,6 +56,7 @@ dependencies {
     implementation(libs.androidx.credentials.play.services.auth)
     implementation(libs.googleid)
     implementation(libs.firebase.firestore)
+    implementation(libs.play.services.auth)
     testImplementation(libs.junit)
     val nav_version = "2.9.0"
     implementation("androidx.navigation:navigation-compose:$nav_version")

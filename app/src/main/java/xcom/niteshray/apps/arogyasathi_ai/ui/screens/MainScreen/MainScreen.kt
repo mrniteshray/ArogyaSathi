@@ -1,6 +1,9 @@
 package xcom.niteshray.apps.arogyasathi_ai.ui.screens.MainScreen
 
 import android.Manifest
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -20,11 +23,16 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Divider
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -128,6 +136,38 @@ fun MainScreen(navController: NavController, mainViewModel: MainViewModel = view
                             },
                             colorFilter = ColorFilter.tint(Color.White)
                         )
+                        Spacer(modifier = Modifier.width(4.dp))
+                        var showMenu by remember { mutableStateOf(false) }
+                        IconButton(onClick = { showMenu = true }) {
+                            Icon(Icons.Default.Info, contentDescription = "Info", tint = Color.White)
+                        }
+                        DropdownMenu(
+                            expanded = showMenu,
+                            onDismissRequest = { showMenu = false }
+                        ) {
+                            DropdownMenuItem(
+                                text = { Text("Open Privacy Policy") },
+                                onClick = {
+                                    showMenu = false
+                                    Intent(Intent.ACTION_VIEW, Uri.parse("https://mrniteshray.github.io/ArogyaSathi/privacy_policy")).apply {
+                                        context.startActivity(this)
+                                    }
+                                }
+                            )
+                            DropdownMenuItem(
+                                text = { Text("Log Out") },
+                                onClick = {
+                                    showMenu = false
+                                    mainViewModel.logout()
+                                    navController.navigate("SignIn"){
+                                        popUpTo("MainScreen"){
+                                            inclusive = true
+                                        }
+                                    }
+                                    Toast.makeText(context, "Logged Out", Toast.LENGTH_SHORT).show()
+                                }
+                            )
+                        }
                     }
                 }
             )

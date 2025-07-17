@@ -13,9 +13,9 @@ personal data and ensuring transparency.
 
 We may collect the following information when you use our App:
 
-- Name (if provided)
-- Email address (if provided)
-- Health-related data (e.g., symptoms, health history, or information you enter or speak to the app)
+- Name
+- Email address 
+- health chat history
 
 ### b. Non-Personal Information
 
@@ -53,7 +53,6 @@ The App may use third-party services that have their own privacy policies. These
 not limited to:
 
 - Google Firebase
-- Google Analytics for Firebase
 
 Please refer to their privacy policies for more information.
 

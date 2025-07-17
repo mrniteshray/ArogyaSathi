@@ -52,9 +52,11 @@ fun SignInScreen(navController : NavController) {
             scope = scope,
             launcher = null,
             login = {
-                navController.popBackStack()
-                navController.navigate("MainScreen")
-                navController.popBackStack()
+                navController.navigate("MainScreen"){
+                    popUpTo("SignIn") {
+                        inclusive = true
+                    }
+                }
                 Toast.makeText(context, "Login successful", Toast.LENGTH_SHORT).show()
 
             }
@@ -82,8 +84,11 @@ fun SignInScreen(navController : NavController) {
                         scope = scope,
                         launcher = launcher,
                         login = {
-                            navController.navigate("MainScreen")
-                            navController.popBackStack()
+                            navController.navigate("MainScreen"){
+                                popUpTo("SignIn") {
+                                    inclusive = true
+                                }
+                            }
                             Toast.makeText(context, "Login successful", Toast.LENGTH_SHORT).show()
                         }
                     )
